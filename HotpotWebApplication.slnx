@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HotpotWebApplication.Tests/HotpotWebApplication.Tests.csproj" Id="84f1d46d-3874-4f11-8321-da97c9d4286d" />
+  <Project Path="HotpotWebApplication/HotpotWebApplication.csproj" />
+</Solution>
