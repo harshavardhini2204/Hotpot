@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="LibraryMembershipApp.Tests/LibraryMembershipApp.Tests.csproj" />
-  <Project Path="Library_Management_Demo/LibraryMembershipApp.csproj" />
-</Solution>
