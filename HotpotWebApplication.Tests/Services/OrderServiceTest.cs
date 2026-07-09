@@ -1,6 +1,8 @@
-﻿using HotpotWebApplication.Models;
+﻿using HotpotWebApplication.Data;
+using HotpotWebApplication.Models;
 using HotpotWebApplication.Repositories.Interfaces;
 using HotpotWebApplication.Services.Implementations;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace HotpotWebApplication.Tests.Services
@@ -10,12 +12,26 @@ namespace HotpotWebApplication.Tests.Services
     {
         private Mock<IOrderRepository> _repoMock;
         private OrderService _service;
+        private Mock<ICartRepository> _cartRepoMock;
+        private Mock<ApplicationDbContext> _contextMock;
 
         [SetUp]
         public void Setup()
         {
             _repoMock = new Mock<IOrderRepository>();
-            _service = new OrderService(_repoMock.Object);
+            _cartRepoMock = new Mock<ICartRepository>();
+
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+
+            var context = new ApplicationDbContext(options);
+
+            _service = new OrderService(
+                _repoMock.Object,
+                _cartRepoMock.Object,
+                context
+            );
         }
 
         [Test]

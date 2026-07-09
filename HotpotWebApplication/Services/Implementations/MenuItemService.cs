@@ -50,5 +50,9 @@ namespace HotpotWebApplication.Services.Implementations
 
             return true;
         }
+        public async Task<IEnumerable<MenuItem>> GetByRestaurantIdAsync(int restaurantId)
+        {
+            return await _repository.GetByRestaurantIdAsync(restaurantId);
+        }
     }
 }

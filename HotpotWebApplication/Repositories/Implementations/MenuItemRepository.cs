@@ -46,6 +46,12 @@ namespace HotpotWebApplication.Repositories.Implementations
                     m.Description.Contains(keyword))
                 .ToListAsync();
         }
+        public async Task<IEnumerable<MenuItem>> GetByRestaurantIdAsync(int restaurantId)
+        {
+            return await _context.MenuItems
+                .Where(m => m.RestaurantId == restaurantId && m.IsAvailable)
+                .ToListAsync();
+        }
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

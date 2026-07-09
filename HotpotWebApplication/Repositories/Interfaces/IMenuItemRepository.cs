@@ -10,6 +10,7 @@ namespace HotpotWebApplication.Repositories.Interfaces
         Task UpdateAsync(MenuItem menuItem);
         Task DeleteAsync(MenuItem menuItem);
         Task<IEnumerable<MenuItem>> SearchMenuItemsAsync(string keyword);
+        Task<IEnumerable<MenuItem>> GetByRestaurantIdAsync(int restaurantId);
         Task SaveAsync();
     }
 }

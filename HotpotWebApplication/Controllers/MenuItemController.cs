@@ -41,7 +41,8 @@ namespace HotpotWebApplication.Controllers
             {
                 MenuItemId = menu.MenuItemId,
                 ItemName = menu.ItemName,
-                Price = menu.Price
+                Price = menu.Price,
+                ImageUrl=menu.ImageUrl
             };
 
             return Ok(dto);
@@ -135,6 +136,13 @@ namespace HotpotWebApplication.Controllers
                 await _menuItemService.SearchMenuItemsAsync(keyword);
 
             return Ok(result);
+        }
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<IActionResult> GetByRestaurant(int restaurantId)
+        {
+            var menuItems = await _menuItemService.GetByRestaurantIdAsync(restaurantId);
+
+            return Ok(menuItems);
         }
 
 

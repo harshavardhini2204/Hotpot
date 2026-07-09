@@ -10,5 +10,8 @@ namespace HotpotWebApplication.Services.Interfaces
         Task<Order> CreateOrderAsync(Order order);
         Task UpdateOrderAsync(Order order);
         Task<bool> DeleteOrderAsync(int id);
+        Task<Order> PlaceOrderAsync(PlaceOrderDto dto);
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+        Task<IEnumerable<Order>> GetOrdersByRestaurantIdAsync(int restaurantId);
     }
 }

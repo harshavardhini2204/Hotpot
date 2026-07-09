@@ -10,6 +10,8 @@ namespace HotpotWebApplication.Repositories.Interfaces
         Task AddAsync(Order order);
         Task UpdateAsync(Order order);
         Task DeleteAsync(Order order);
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+        Task<IEnumerable<Order>> GetOrdersByRestaurantIdAsync(int restaurantId);
         Task SaveAsync();
     }
 }

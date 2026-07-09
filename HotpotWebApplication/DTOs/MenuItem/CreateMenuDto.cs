@@ -34,7 +34,7 @@ namespace HotpotWebApplication.DTOs.MenuItem
         public decimal Carbs { get; set; }
         public decimal Fat { get; set; }
 
-        public string ImageUrl { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
         [Required]
         public bool IsAvailable { get; set; }
     }

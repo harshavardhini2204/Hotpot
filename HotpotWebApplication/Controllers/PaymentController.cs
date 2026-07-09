@@ -15,10 +15,12 @@ namespace HotpotWebApplication.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
+        private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentController> _logger;
-        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger)
+        public PaymentController(IOrderService orderService,IPaymentService paymentService, ILogger<PaymentController> logger)
         {
+            _orderService = orderService;
             _paymentService = paymentService;
             _logger = logger;
         }
@@ -46,14 +48,19 @@ namespace HotpotWebApplication.Controllers
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePayment(CreatePaymentDto dto)
+          
         {
+            var order = await _orderService.GetOrderByIdAsync(dto.OrderId);
+
             var payment = new Payment
             {
                 OrderId = dto.OrderId,
                 PaymentMethod = dto.PaymentMethod,
-                PaymentStatus = PaymentStatus.Pending,
-                Amount = dto.Amount,
-                TransactionReference = dto.TransactionReference,
+                PaymentStatus = dto.PaymentMethod == "Cash on Delivery"
+        ? PaymentStatus.Pending
+        : PaymentStatus.Completed,
+                Amount = order.TotalAmount,
+                TransactionReference = Guid.NewGuid().ToString("N")[..10].ToUpper(),
                 PaymentDate = DateTime.Now
             };
 

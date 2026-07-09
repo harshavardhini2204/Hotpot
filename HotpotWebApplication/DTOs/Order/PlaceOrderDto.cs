@@ -6,12 +6,12 @@ namespace HotpotWebApplication.DTOs.Order
     {
         [Required]
         public int UserId {  get; set; }
-        [Required]
-        public int RestaurantId {  get; set; }
+        
         [Required]
         [StringLength(100)]
         public string? ShippingAddress {  get; set; }
         [Required]
         public string? Notes {  get; set; }
+        public string? CouponCode { get; set; }
     }
 }

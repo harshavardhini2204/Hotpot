@@ -25,6 +25,7 @@ namespace HotpotWebApplication.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddToCart(AddToCartDto dto)
         {
+            Console.WriteLine("Controller Hit");
             await _cartService.AddToCartAsync(dto);
 
             _logger.LogInformation(
@@ -56,11 +57,10 @@ namespace HotpotWebApplication.Controllers
         [Authorize]
         [HttpPut("update/{cartItemId}")]
         public async Task<IActionResult> UpdateQuantity(
-    int cartItemId,
-    int quantity)
+     int cartItemId,
+     [FromBody] UpdateCartItemDto dto)
         {
-            var updated = await _cartService
-        .UpdateQuantityAsync(cartItemId, quantity);
+            var updated = await _cartService.UpdateQuantityAsync(cartItemId, dto.Quantity);
 
             if (!updated)
                 return NotFound("Cart item not found");

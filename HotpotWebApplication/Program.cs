@@ -33,6 +33,16 @@ namespace HotpotWebApplication
 
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ReactPolicy", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -59,6 +69,9 @@ namespace HotpotWebApplication
 
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -103,6 +116,7 @@ namespace HotpotWebApplication
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("ReactPolicy");
 
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();

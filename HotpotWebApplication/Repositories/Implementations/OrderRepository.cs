@@ -19,7 +19,18 @@ namespace HotpotWebApplication.Repositories.Implementations
 
         public async Task<Order?> GetByIdAsync(int id)
         {
-            return await _context.Orders.FindAsync(id);
+            return await _context.Orders
+
+        .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.MenuItem)
+
+        .Include(o => o.Payments)
+
+        .Include(o => o.User)
+
+        .Include(o => o.Restaurant)
+
+        .FirstOrDefaultAsync(o => o.OrderId == id);
         }
         public async Task AddOrderItemAsync(OrderItem orderItem)
         {
@@ -41,6 +52,20 @@ namespace HotpotWebApplication.Repositories.Implementations
         {
             _context.Orders.Remove(order);
             return Task.CompletedTask;
+        }
+        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.OrderItems)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Order>>
+    GetOrdersByRestaurantIdAsync(int restaurantId)
+        {
+            return await _context.Orders
+                .Where(o => o.RestaurantId == restaurantId)
+                .ToListAsync();
         }
 
         public async Task SaveAsync()

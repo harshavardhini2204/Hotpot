@@ -1,4 +1,5 @@
 ﻿using HotpotWebApplication.Models;
+using HotpotWebApplication.Repositories.Implementations;
 using HotpotWebApplication.Repositories.Interfaces;
 using HotpotWebApplication.Services.Interfaces;
 
@@ -19,6 +20,11 @@ namespace HotpotWebApplication.Services.Implementations
         public async Task<Restaurant?> GetRestaurantByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
+        }
+        public async Task<Restaurant?> GetRestaurantByOwnerAsync(int userId)
+        {
+            return await _repository
+                .GetRestaurantByOwnerAsync(userId);
         }
 
         public async Task<Restaurant> CreateRestaurantAsync(Restaurant restaurant)

@@ -26,24 +26,21 @@ namespace HotpotWebApplication.Controllers
         [HttpPost("placeOrder")]
         public async  Task<IActionResult>PlaceOrder(PlaceOrderDto dto)
         {
-            var order = new Order
-            {
-                UserId = dto.UserId,
-                RestaurantId = dto.RestaurantId,
-                ShippingAddress = dto.ShippingAddress,
-                OrderDate = DateTime.Now,
-                OrderStatus = OrderStatus.Pending
-            };
+            var order =
+        await _orderService.PlaceOrderAsync(dto);
 
-            var createdOrder =
-                await _orderService.CreateOrderAsync(order);
+            return Ok(order);
 
-            _logger.LogInformation(
-                "Order created. OrderId: {OrderId}",
-                createdOrder.OrderId);
 
-            return Ok(createdOrder);
+        }
+        [Authorize(Roles = "RestaurantOwner")]
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<IActionResult> GetRestaurantOrders(int restaurantId)
+        {
+            var orders =
+                await _orderService.GetOrdersByRestaurantIdAsync(restaurantId);
 
+            return Ok(orders);
         }
         [Authorize(Roles ="Admin")]
         [HttpGet]
@@ -69,7 +66,7 @@ namespace HotpotWebApplication.Controllers
         }
         [Authorize(Roles ="Admin,RestaurantOwner")]
         [HttpPut("status/{id}")]
-        public async Task<IActionResult>UpdateOrderStatus(int id,OrderStatus dto)
+        public async Task<IActionResult>UpdateOrderStatus(int id,[FromBody]OrderStatus dto)
         {
             var order =
                await _orderService.GetOrderByIdAsync(id);
@@ -89,6 +86,7 @@ namespace HotpotWebApplication.Controllers
                 OrderId = order.OrderId,
                 Status = order.OrderStatus
             });
+
         }
         [Authorize(Roles ="Admin")]
         [HttpDelete("{id}")]
@@ -105,6 +103,21 @@ namespace HotpotWebApplication.Controllers
                 id);
 
             return Ok("Order deleted successfully");
+        }
+        [Authorize]
+        [HttpGet("my-orders")]
+        public async Task<IActionResult> GetMyOrders()
+        {
+            var userIdClaim = User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+
+            return Ok(orders);
         }
     }
 }

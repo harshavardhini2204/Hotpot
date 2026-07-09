@@ -14,10 +14,12 @@ namespace HotpotWebApplication.Controllers
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
+        private ApplicationDbContext _context;
         private readonly ILogger<RestaurantController> _logger;
-        public RestaurantController(IRestaurantService service,ILogger<RestaurantController>logger)
+        public RestaurantController(IRestaurantService service,ApplicationDbContext context,ILogger<RestaurantController>logger)
         {
             _restaurantService = service;
+            _context = context;
             _logger = logger;
         }
         [HttpGet]
@@ -36,6 +38,17 @@ namespace HotpotWebApplication.Controllers
 
             if (restaurant == null)
                 return NotFound("Restaurant not found");
+
+            return Ok(restaurant);
+        }
+        [HttpGet("owner/{userId}")]
+        public async Task<IActionResult> GetRestaurantByOwner(int userId)
+        {
+            var restaurant = await _restaurantService
+                .GetRestaurantByOwnerAsync(userId);
+
+            if (restaurant == null)
+                return NotFound();
 
             return Ok(restaurant);
         }

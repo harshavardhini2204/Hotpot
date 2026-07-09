@@ -84,13 +84,23 @@ namespace HotpotWebApplication.Controllers
             if(!isPasswordValid) return Unauthorized(new { message = "Invalid email or password" });
             var token = _jwtService.GenerateToken(user.UserId,user.Email,user.Role);
             _logger.LogInformation("User logged in: {Email}", user.Email);
+            int? restaurantId = null;
+
+            if (user.Role == "RestaurantOwner")
+            {
+                restaurantId = await _context.Restaurants
+                    .Where(r => r.UserId == user.UserId)
+                    .Select(r => (int?)r.RestaurantId)
+                    .FirstOrDefaultAsync();
+            }
 
             return Ok(new
             {
                 Token = token,
                 UserId = user.UserId,
                 Email = user.Email,
-                Role = user.Role
+                Role = user.Role,
+                RestaurantId = restaurantId
             });
 
         }

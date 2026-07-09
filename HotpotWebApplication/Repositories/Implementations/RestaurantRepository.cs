@@ -21,6 +21,11 @@ namespace HotpotWebApplication.Repositories.Implementations
         {
             return await _context.Restaurants.FindAsync(id);
         }
+        public async Task<Restaurant?> GetRestaurantByOwnerAsync(int userId)
+        {
+            return await _context.Restaurants
+                .FirstOrDefaultAsync(r => r.UserId == userId);
+        }
 
         public async Task AddAsync(Restaurant restaurant)
         {

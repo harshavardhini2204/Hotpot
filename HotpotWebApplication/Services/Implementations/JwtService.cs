@@ -18,7 +18,7 @@ namespace HotpotWebApplication.Services.Implemenations
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,userid.ToString()),
+                new Claim("UserId", userid.ToString()),
                 new Claim(ClaimTypes.Email,email),
                 new Claim(ClaimTypes.Role,role)
             };
